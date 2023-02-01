@@ -457,6 +457,22 @@ class DeliveryTest {
     }
 
     @Test
+    void shouldPhoneBeginInsteadPlusSevenAnotherNumber() {
+        String date = DataGenerator.generateDate(3);
+        var validUser = DataGenerator.Registration.generateUser("ru");
+        Faker faker = new Faker();
+
+        $("[data-test-id=city] input").setValue(validUser.getCity());
+        assertEquals($("[data-test-id=date] input").getValue(), date);
+        $("[name=name]").setValue(validUser.getName());
+        $("[name=phone]").setValue("+" + String.valueOf(faker.number().randomDigit()) + "9055554444");
+        $("[data-test-id=agreement] span").click();
+        $x("//*[contains(text(), 'Запланировать')]").click();
+        $("[data-test-id=phone] span .input__sub").shouldHave(Condition.text("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678."), visible);
+
+    }
+
+    @Test
     void shouldPhoneSymbol() {
         String date = DataGenerator.generateDate(3);
         var validUser = DataGenerator.Registration.generateUser("ru");
